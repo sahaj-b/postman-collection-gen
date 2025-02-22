@@ -47,8 +47,8 @@ program
     .option("-l,--language_variant <tuple>", "Language,Variant pair to output", parseTuple, { language: "curl", variant: "curl" })
     .option("-e,--envvars <path>", "Path to environment variables exported from Postman. NOTE: Environment variables will not override variables provided in collection")
     .option("-d, --debug", "Output additional debugging info")
-    .option("--short", "Use short format for commands")
-    .option("--names", "Output request names with hashtag and newline");
+    .option("--short", "Use short format for curl commands")
+    .option("--names", "Add request names as headers/comments in curl commands output");
 program.parse(process.argv);
 function debugPrint(message) {
     if (program.debug) {
