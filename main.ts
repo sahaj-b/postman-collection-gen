@@ -80,7 +80,7 @@ program
   .option("--short", "Use short format for curl commands")
   .option(
     "--names",
-    "Add request names as headers/comments in curl commands output",
+    "Add request names as comments in curl commands output",
   );
 
 program.parse(process.argv);
