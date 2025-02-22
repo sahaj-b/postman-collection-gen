@@ -18,8 +18,9 @@ Options:
                                  Postman. NOTE: Environment variables will not
                                  override variables provided in collection
   -d, --debug                    Output additional debugging info
-  --short                        Use short format for commands
-  --names                        Output request names with hashtag and newline
+  --short                        Use short format for curl commands
+  --names                        Add request names as headers/comments in curl
+                                 commands output
   -h, --help                     output usage information
 ```
 ### Generate cURL code
