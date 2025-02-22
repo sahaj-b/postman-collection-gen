@@ -101,10 +101,12 @@ const collection = new Collection(
 
 debugPrint(collection);
 
+const lvp: { language: string; variant: string } = program["language_variant"];
+
 const options = {
   trimRequestBody: true,
   followRedirect: true,
-  longFormat: !program["short"],
+  longFormat: !(program["short"] && lvp.language === "curl" && lvp.variant === "curl"),
 };
 
 function isItem(itemG: Item | ItemGroup<Item>): itemG is Item {
@@ -139,11 +141,15 @@ function printSnippet(item: Item | ItemGroup<Item>) {
         if (matches && matches.length > 0) {
           matches.forEach((m) => console.warn(`${m} : Variable not provided`));
         }
-        // add request name as header if --names is set
-        if (program["names"]) {
-          console.log(`# ${item.name}`);
-          console.log(completeSnippet);
-          console.log();
+        // output request names as comments for curl if --names flag is set
+        if (lvp.language === "curl" && lvp.variant === "curl") {
+          if (program["names"]) {
+            console.log(`# ${item.name}`);
+            console.log(completeSnippet);
+            console.log();
+          } else {
+            console.log(completeSnippet);
+          }
         } else {
           console.log(completeSnippet);
         }
@@ -166,7 +172,7 @@ if (program["envvars"]) {
   });
 }
 
-const lvp: { language: string; variant: string } = program["language_variant"];
+
 debugPrint(environmentVariables);
 
 collection.items.all().forEach(printSnippet);

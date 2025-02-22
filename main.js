@@ -59,10 +59,11 @@ debugPrint(program.opts());
 var collectionPath = program["collection"];
 var collection = new postman_collection_1.Collection(JSON.parse((0, fs_1.readFileSync)(collectionPath).toString()));
 debugPrint(collection);
+var lvp = program["language_variant"];
 var options = {
     trimRequestBody: true,
     followRedirect: true,
-    longFormat: !program["short"],
+    longFormat: !(program["short"] && lvp.language === "curl" && lvp.variant === "curl"),
 };
 function isItem(itemG) {
     return itemG.request !== undefined;
@@ -82,11 +83,16 @@ function printSnippet(item) {
             if (matches && matches.length > 0) {
                 matches.forEach(function (m) { return console.warn("".concat(m, " : Variable not provided")); });
             }
-            // add request name as header if --names is set
-            if (program["names"]) {
-                console.log("# ".concat(item.name));
-                console.log(completeSnippet);
-                console.log();
+            // output request names as comments for curl if --names flag is set
+            if (lvp.language === "curl" && lvp.variant === "curl") {
+                if (program["names"]) {
+                    console.log("# ".concat(item.name));
+                    console.log(completeSnippet);
+                    console.log();
+                }
+                else {
+                    console.log(completeSnippet);
+                }
             }
             else {
                 console.log(completeSnippet);
@@ -105,6 +111,5 @@ if (program["envvars"]) {
         environmentVariables.append(new postman_collection_1.Variable(v));
     });
 }
-var lvp = program["language_variant"];
 debugPrint(environmentVariables);
 collection.items.all().forEach(printSnippet);
